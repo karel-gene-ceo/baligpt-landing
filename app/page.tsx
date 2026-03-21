@@ -66,90 +66,74 @@ export default function Home() {
     }
   }
 
+  const fade = (delay: number) => ({
+    opacity: mounted ? 1 : 0,
+    transform: mounted ? "translateY(0)" : "translateY(12px)",
+    transitionDelay: `${delay}ms`,
+  });
+
   return (
     <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-[#faf9f7]">
-      {/* Single subtle gradient wash — top right, barely visible */}
+      {/* Subtle gradient wash */}
       <div
-        className="pointer-events-none absolute -top-[40%] -right-[20%] w-[900px] h-[900px] rounded-full opacity-[0.07]"
+        className="pointer-events-none absolute -top-[40%] -right-[20%] w-[900px] h-[900px] rounded-full opacity-[0.06]"
         style={{
-          background:
-            "radial-gradient(circle, #5C7A62 0%, transparent 65%)",
+          background: "radial-gradient(circle, #5C7A62 0%, transparent 65%)",
         }}
       />
 
-      {/* Content — generous whitespace, stacked vertically */}
-      <main className="relative z-10 flex flex-col items-center px-6 w-full max-w-[560px]">
+      <main className="relative z-10 flex flex-col items-center px-6 w-full max-w-[520px]">
         {/* Wordmark */}
-        <div
-          className="transition-all duration-700 ease-out"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(12px)",
-          }}
+        <p
+          className="text-[13px] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]/35 mb-8 transition-all duration-700 ease-out"
+          style={fade(0)}
         >
-          <h1 className="text-[15px] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]/40 mb-16">
-            BaliGPT
-          </h1>
-        </div>
+          BaliGPT
+        </p>
 
-        {/* Headline — large serif, one clear statement */}
-        <div
-          className="transition-all duration-700 ease-out delay-100"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(16px)",
-            transitionDelay: "100ms",
-          }}
+        {/* Headline */}
+        <h1
+          className="font-display text-[clamp(2.4rem,7vw,4.2rem)] leading-[1.05] tracking-[-0.02em] text-[#1a1a1a] text-center mb-5 transition-all duration-700 ease-out"
+          style={fade(80)}
         >
-          <h2 className="font-display text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] tracking-[-0.02em] text-[#1a1a1a] text-center mb-6">
-            Your local friend
-            <br />
-            <span className="text-[#5C7A62]">in Bali</span>
-          </h2>
-        </div>
+          Your local friend
+          <br />
+          <span className="text-[#5C7A62]">in Bali</span>
+        </h1>
 
-        {/* One-liner */}
-        <div
-          className="transition-all duration-700 ease-out"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(16px)",
-            transitionDelay: "200ms",
-          }}
+        {/* Description */}
+        <p
+          className="text-[16px] leading-[1.6] text-[#1a1a1a]/45 text-center max-w-[400px] mb-10 transition-all duration-700 ease-out"
+          style={fade(160)}
         >
-          <p className="text-[17px] leading-relaxed text-[#1a1a1a]/50 text-center max-w-[420px] mb-14">
-            AI that actually knows Bali. Real prices, honest area guides,
-            and the things no one tells you until you&apos;ve already made the mistake.
-          </p>
-        </div>
+          AI that actually knows Bali. Real prices, honest area
+          guides, and the things no one tells you until you&apos;ve
+          already made the mistake.
+        </p>
 
-        {/* Chat preview — minimal, just the input bar */}
+        {/* Chat preview */}
         <div
-          className="w-full mb-14 transition-all duration-700 ease-out"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(16px)",
-            transitionDelay: "300ms",
-          }}
+          className="w-full mb-8 transition-all duration-700 ease-out"
+          style={fade(240)}
         >
-          <div className="rounded-2xl border border-[#e8e5e0] bg-white px-5 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+          <div className="rounded-xl border border-[#e8e5e0] bg-white px-4 py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
             <div className="flex items-center gap-3">
-              <div className="flex-1 min-h-[28px] flex items-center">
-                <span className="text-[15px] text-[#1a1a1a]/35">
+              <div className="flex-1 min-h-[24px] flex items-center">
+                <span className="text-[15px] text-[#1a1a1a]/30">
                   {displayed}
                   <span
-                    className="inline-block w-[1.5px] h-[17px] bg-[#5C7A62] ml-[1px] align-text-bottom"
+                    className="inline-block w-[1.5px] h-[16px] bg-[#5C7A62] ml-[1px] align-text-bottom"
                     style={{ animation: "blink 1.2s step-end infinite" }}
                   />
                 </span>
               </div>
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#5C7A62] flex items-center justify-center">
+              <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#5C7A62] flex items-center justify-center">
                 <svg
-                  className="w-4 h-4 text-white"
+                  className="w-3.5 h-3.5 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                 >
                   <path
                     strokeLinecap="round"
@@ -164,22 +148,18 @@ export default function Home() {
 
         {/* Waitlist */}
         <div
-          className="w-full mb-20 transition-all duration-700 ease-out"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(16px)",
-            transitionDelay: "400ms",
-          }}
+          className="w-full mb-10 transition-all duration-700 ease-out"
+          style={fade(320)}
         >
           {submitted ? (
-            <div className="flex flex-col items-center gap-3 py-6">
-              <div className="w-10 h-10 rounded-full bg-[#5C7A62]/8 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2 py-4">
+              <div className="w-9 h-9 rounded-full bg-[#5C7A62]/10 flex items-center justify-center mb-1">
                 <svg
-                  className="w-5 h-5 text-[#5C7A62]"
+                  className="w-4.5 h-4.5 text-[#5C7A62]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                 >
                   <path
                     strokeLinecap="round"
@@ -188,15 +168,15 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <p className="text-[17px] font-medium text-[#1a1a1a]">
+              <p className="text-[16px] font-medium text-[#1a1a1a]">
                 You&apos;re on the list
               </p>
-              <p className="text-sm text-[#1a1a1a]/40">
+              <p className="text-[14px] text-[#1a1a1a]/40">
                 We&apos;ll reach out when it&apos;s your turn.
               </p>
             </div>
           ) : (
-            <div className="flex flex-col items-center">
+            <>
               <form
                 onSubmit={handleSubmit}
                 className="flex w-full gap-2.5"
@@ -207,55 +187,47 @@ export default function Home() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
-                  className="flex-1 h-12 px-4 rounded-xl border-[#e8e5e0] bg-white text-[15px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] placeholder:text-[#1a1a1a]/25 focus-visible:ring-[#5C7A62]/20 focus-visible:border-[#5C7A62]/40"
+                  className="flex-1 h-11 px-4 rounded-lg border-[#e8e5e0] bg-white text-[15px] shadow-[0_1px_2px_rgba(0,0,0,0.04)] placeholder:text-[#1a1a1a]/25 focus-visible:ring-[#5C7A62]/20 focus-visible:border-[#5C7A62]/40"
                 />
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="h-12 px-6 rounded-xl bg-[#1a1a1a] text-white text-[15px] font-medium hover:bg-[#333] active:scale-[0.98] transition-all cursor-pointer"
+                  className="h-11 px-5 rounded-lg bg-[#1a1a1a] text-white text-[14px] font-medium hover:bg-[#333] active:scale-[0.98] transition-all cursor-pointer"
                 >
                   {loading ? "..." : "Get early access"}
                 </Button>
               </form>
-              <p className="mt-3.5 text-[13px] text-[#1a1a1a]/30">
+              <p className="mt-3 text-[12px] text-[#1a1a1a]/25 text-center">
                 Free for the first 500 people. No spam.
               </p>
-            </div>
+            </>
           )}
         </div>
 
-        {/* Minimal feature row — just text, no cards, no icons */}
+        {/* Feature keywords */}
         <div
-          className="flex flex-wrap justify-center gap-x-6 gap-y-2 transition-all duration-700 ease-out"
-          style={{
-            opacity: mounted ? 1 : 0,
-            transitionDelay: "500ms",
-          }}
+          className="flex flex-wrap justify-center gap-x-2 gap-y-1 transition-all duration-700 ease-out"
+          style={fade(400)}
         >
-          {[
-            "Prices",
-            "Areas",
-            "Stays",
-            "Scams",
-            "Transport",
-            "Food",
-          ].map((item, i) => (
-            <span
-              key={item}
-              className="text-[13px] text-[#1a1a1a]/30 tracking-wide uppercase"
-            >
-              {item}
-              {i < 5 && (
-                <span className="ml-6 text-[#1a1a1a]/10">·</span>
-              )}
-            </span>
-          ))}
+          {["Prices", "Areas", "Stays", "Scams", "Transport", "Food"].map(
+            (item, i, arr) => (
+              <span
+                key={item}
+                className="text-[12px] text-[#1a1a1a]/25 tracking-[0.08em] uppercase"
+              >
+                {item}
+                {i < arr.length - 1 && (
+                  <span className="ml-2 text-[#1a1a1a]/12">·</span>
+                )}
+              </span>
+            )
+          )}
         </div>
       </main>
 
-      {/* Footer — barely there */}
-      <footer className="relative z-10 mt-auto pb-8 pt-16">
-        <p className="text-[12px] text-[#1a1a1a]/20 tracking-wide">
+      {/* Footer */}
+      <footer className="relative z-10 pb-6 pt-12">
+        <p className="text-[11px] text-[#1a1a1a]/18 tracking-[0.04em]">
           Built for people who live in Bali
         </p>
       </footer>
