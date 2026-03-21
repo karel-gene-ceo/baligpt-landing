@@ -1,58 +1,89 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
-const EXAMPLE_QUESTIONS = [
+const QUESTIONS = [
   "Where should I stay in Canggu?",
   "Is it safe to rent a scooter?",
   "Best coworking spaces with fast wifi?",
-  "How much should a villa cost?",
-  "What&apos;s Nyepi and should I plan around it?",
-  "Where do locals actually eat?",
+  "How much should a villa cost per month?",
+  "What is Nyepi and should I plan around it?",
+  "Where do locals actually eat in Ubud?",
 ];
 
-function FloatingOrb({ delay, className }: { delay: number; className: string }) {
-  return (
-    <div
-      className={`absolute rounded-full blur-3xl opacity-20 animate-float ${className}`}
-      style={{ animationDelay: `${delay}s` }}
-    />
-  );
-}
+const FEATURES = [
+  {
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+      </svg>
+    ),
+    title: "Real prices",
+    desc: "What things actually cost, not tourist markup",
+  },
+  {
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+      </svg>
+    ),
+    title: "Area guides",
+    desc: "Honest vibes, not marketing fluff",
+  },
+  {
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
+    ),
+    title: "Scam alerts",
+    desc: "Know what to avoid before you arrive",
+  },
+  {
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+      </svg>
+    ),
+    title: "Book stays",
+    desc: "Find and book accommodation directly",
+  },
+];
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [displayedText, setDisplayedText] = useState("");
-  const [isTyping, setIsTyping] = useState(true);
+  const [currentQ, setCurrentQ] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [typing, setTyping] = useState(true);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  // Typewriter effect for example questions
   useEffect(() => {
-    const question = EXAMPLE_QUESTIONS[currentQuestion];
-    if (isTyping) {
-      if (displayedText.length < question.length) {
-        const timeout = setTimeout(() => {
-          setDisplayedText(question.slice(0, displayedText.length + 1));
-        }, 40);
-        return () => clearTimeout(timeout);
+    const q = QUESTIONS[currentQ];
+    if (typing) {
+      if (displayed.length < q.length) {
+        const t = setTimeout(() => setDisplayed(q.slice(0, displayed.length + 1)), 45);
+        return () => clearTimeout(t);
       } else {
-        const timeout = setTimeout(() => setIsTyping(false), 2000);
-        return () => clearTimeout(timeout);
+        const t = setTimeout(() => setTyping(false), 2200);
+        return () => clearTimeout(t);
       }
     } else {
-      if (displayedText.length > 0) {
-        const timeout = setTimeout(() => {
-          setDisplayedText(displayedText.slice(0, -1));
-        }, 20);
-        return () => clearTimeout(timeout);
+      if (displayed.length > 0) {
+        const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 18);
+        return () => clearTimeout(t);
       } else {
-        setCurrentQuestion((prev) => (prev + 1) % EXAMPLE_QUESTIONS.length);
-        setIsTyping(true);
+        setCurrentQ((p) => (p + 1) % QUESTIONS.length);
+        setTyping(true);
       }
     }
-  }, [displayedText, isTyping, currentQuestion]);
+  }, [displayed, typing, currentQ]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -64,143 +95,211 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      setSubmitted(true);
     } catch {
-      setSubmitted(true);
+      // still show success
     } finally {
       setLoading(false);
+      setSubmitted(true);
     }
   }
 
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-center px-6 overflow-hidden">
-      {/* Ambient background orbs */}
-      <FloatingOrb delay={0} className="w-96 h-96 bg-[#5C7A62] -top-48 -left-48" />
-      <FloatingOrb delay={2} className="w-80 h-80 bg-[#8FB996] -bottom-40 -right-40" />
-      <FloatingOrb delay={4} className="w-64 h-64 bg-[#A7C4AA] top-1/4 right-1/4" />
+    <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden">
+      {/* Grain overlay */}
+      <div
+        className="pointer-events-none fixed inset-0 z-50 opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+        }}
+      />
 
-      <main className="relative z-10 flex flex-col items-center text-center max-w-3xl">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#5C7A62]/10 border border-[#5C7A62]/20 mb-8">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5C7A62] opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5C7A62]" />
-          </span>
-          <span className="text-sm font-medium text-[#5C7A62]">
+      {/* Ambient gradient blobs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute -top-1/4 -left-1/4 w-[800px] h-[800px] rounded-full animate-pulse-soft"
+          style={{
+            background: "radial-gradient(circle, #5C7A62 0%, transparent 70%)",
+            animationDelay: "0s",
+          }}
+        />
+        <div
+          className="absolute -bottom-1/4 -right-1/4 w-[600px] h-[600px] rounded-full animate-pulse-soft"
+          style={{
+            background: "radial-gradient(circle, #8FB996 0%, transparent 70%)",
+            animationDelay: "1.5s",
+          }}
+        />
+        <div
+          className="absolute top-1/3 right-1/3 w-[400px] h-[400px] rounded-full animate-pulse-soft"
+          style={{
+            background: "radial-gradient(circle, #d4c5a9 0%, transparent 70%)",
+            animationDelay: "3s",
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <main className="relative z-10 flex flex-col items-center text-center max-w-3xl px-6 py-16">
+        {/* Status badge */}
+        <div
+          className="animate-fade-up"
+          style={{ animationDelay: "0s" }}
+        >
+          <Badge
+            variant="outline"
+            className="mb-10 px-4 py-1.5 text-sm font-normal border-sage/30 text-sage bg-sage/5 rounded-full"
+          >
+            <span className="relative flex h-1.5 w-1.5 mr-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sage opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-sage" />
+            </span>
             Now in early access
-          </span>
+          </Badge>
         </div>
 
-        {/* Logo */}
-        <h1 className="text-6xl sm:text-8xl font-bold tracking-tight text-[#1a1a1a] mb-6">
-          BaliGPT
+        {/* Headline */}
+        <h1
+          className="animate-fade-up font-display text-7xl sm:text-[110px] leading-[0.9] tracking-tight text-foreground mb-8"
+          style={{ animationDelay: "0.1s" }}
+        >
+          Bali<span className="text-sage">GPT</span>
         </h1>
 
-        {/* Tagline */}
-        <p className="text-2xl sm:text-3xl text-zinc-600 font-light mb-4 leading-snug">
-          Your local friend in Bali.
+        {/* Subheadline */}
+        <p
+          className="animate-fade-up text-xl sm:text-2xl text-muted-foreground font-light max-w-lg mb-6 leading-relaxed"
+          style={{ animationDelay: "0.2s" }}
+        >
+          Your local friend in Bali, powered by AI.
         </p>
 
-        {/* Description */}
-        <p className="text-lg sm:text-xl text-zinc-400 max-w-xl mb-10 leading-relaxed">
-          The AI that actually knows Bali. Real prices, honest area guides,
-          scams to avoid, where to eat, what to do. Like texting a friend
-          who&apos;s lived here for years.
+        <p
+          className="animate-fade-up text-base text-muted-foreground/70 max-w-md mb-12 leading-relaxed"
+          style={{ animationDelay: "0.3s" }}
+        >
+          Real prices. Honest area guides. Scams to avoid. Restaurants locals
+          love. Like texting someone who&apos;s lived here for years.
         </p>
 
-        {/* Interactive chat preview */}
-        <div className="w-full max-w-lg mb-10">
-          <div className="bg-white rounded-2xl border border-zinc-200 shadow-lg shadow-zinc-200/50 p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-[#5C7A62] flex items-center justify-center">
-                <span className="text-white text-xs font-bold">BG</span>
+        {/* Chat preview card */}
+        <div
+          className="animate-fade-up w-full max-w-lg mb-12"
+          style={{ animationDelay: "0.4s" }}
+        >
+          <Card className="overflow-hidden border-border/60 bg-card/80 backdrop-blur-sm shadow-xl shadow-sage/5">
+            {/* Chat header bar */}
+            <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border/50">
+              <div className="w-7 h-7 rounded-full bg-sage flex items-center justify-center">
+                <span className="text-white text-[10px] font-bold tracking-tight">
+                  BG
+                </span>
               </div>
-              <span className="text-sm font-medium text-zinc-900">BaliGPT</span>
-            </div>
-            <div className="bg-zinc-50 rounded-xl px-4 py-3 min-h-[48px] flex items-center">
-              <span className="text-zinc-500 text-base">
-                {displayedText}
-                <span className="inline-block w-0.5 h-5 bg-[#5C7A62] ml-0.5 animate-blink align-middle" />
+              <span className="text-sm font-medium text-foreground/80">
+                BaliGPT
               </span>
+              <div className="ml-auto flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-border" />
+                <div className="w-2.5 h-2.5 rounded-full bg-border" />
+                <div className="w-2.5 h-2.5 rounded-full bg-border" />
+              </div>
             </div>
-          </div>
+            {/* Chat input area */}
+            <div className="p-4">
+              <div className="bg-muted/50 rounded-xl px-4 py-3.5 flex items-center min-h-[52px]">
+                <span className="text-muted-foreground text-[15px]">
+                  {displayed}
+                  <span className="inline-block w-[2px] h-[18px] bg-sage ml-0.5 animate-blink align-text-bottom" />
+                </span>
+              </div>
+            </div>
+          </Card>
         </div>
 
         {/* Waitlist form */}
-        {submitted ? (
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-[#5C7A62]/10 flex items-center justify-center mb-2">
-              <svg
-                className="w-6 h-6 text-[#5C7A62]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+        <div
+          className="animate-fade-up w-full max-w-md mb-16"
+          style={{ animationDelay: "0.5s" }}
+        >
+          {submitted ? (
+            <div className="flex flex-col items-center gap-4 py-4">
+              <div className="w-14 h-14 rounded-full bg-sage/10 flex items-center justify-center">
+                <svg
+                  className="w-7 h-7 text-sage"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <p className="text-xl font-medium text-foreground">
+                You&apos;re on the list
+              </p>
+              <p className="text-muted-foreground">
+                We&apos;ll let you know when it&apos;s your turn.
+              </p>
             </div>
-            <p className="text-xl font-medium text-zinc-900">
-              You&apos;re on the list
-            </p>
-            <p className="text-zinc-500">
-              We&apos;ll let you know when it&apos;s your turn.
-            </p>
-          </div>
-        ) : (
-          <div className="w-full max-w-md">
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col sm:flex-row gap-3"
-            >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="flex-1 h-14 px-5 rounded-2xl border border-zinc-200 bg-white text-base text-zinc-900 placeholder:text-zinc-400 outline-none focus:border-[#5C7A62] focus:ring-2 focus:ring-[#5C7A62]/20 transition-all shadow-sm"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="h-14 px-8 rounded-2xl bg-[#5C7A62] text-white font-semibold text-base hover:bg-[#4a6350] active:scale-[0.98] transition-all disabled:opacity-50 cursor-pointer shadow-sm shadow-[#5C7A62]/25"
+          ) : (
+            <>
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit}
+                className="flex flex-col sm:flex-row gap-3"
               >
-                {loading ? "Joining..." : "Join waitlist"}
-              </button>
-            </form>
-            <p className="mt-4 text-sm text-zinc-400">
-              Free early access for the first 500 signups. No spam, ever.
-            </p>
-          </div>
-        )}
+                <Input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="flex-1 h-13 px-5 rounded-2xl border-border/60 bg-card text-base shadow-sm focus-visible:ring-sage/30 focus-visible:border-sage"
+                />
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  size="lg"
+                  className="h-13 px-8 rounded-2xl bg-sage text-white font-semibold text-base hover:bg-sage-dark active:scale-[0.98] transition-all shadow-md shadow-sage/20 cursor-pointer"
+                >
+                  {loading ? "Joining..." : "Join waitlist"}
+                </Button>
+              </form>
+              <p className="mt-4 text-sm text-muted-foreground/60">
+                Free early access. No spam, ever.
+              </p>
+            </>
+          )}
+        </div>
 
-        {/* Feature pills */}
-        <div className="flex flex-wrap justify-center gap-2 mt-12">
-          {[
-            "Real-time prices",
-            "Area guides",
-            "Scam alerts",
-            "Restaurant recs",
-            "Transport costs",
-            "Visa info",
-          ].map((feature) => (
-            <span
-              key={feature}
-              className="px-4 py-2 rounded-full bg-white border border-zinc-200 text-sm text-zinc-600 shadow-sm"
+        {/* Feature grid */}
+        <div
+          className="animate-fade-up grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-xl"
+          style={{ animationDelay: "0.6s" }}
+        >
+          {FEATURES.map((f) => (
+            <div
+              key={f.title}
+              className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/40 hover:border-sage/30 hover:bg-sage/5 transition-all duration-300"
             >
-              {feature}
-            </span>
+              <div className="text-sage/70">{f.icon}</div>
+              <span className="text-sm font-medium text-foreground/80">
+                {f.title}
+              </span>
+              <span className="text-xs text-muted-foreground/60 leading-snug">
+                {f.desc}
+              </span>
+            </div>
           ))}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="absolute bottom-6 text-sm text-zinc-400">
+      <footer className="relative z-10 pb-8 text-sm text-muted-foreground/40">
         Built for people who actually live in Bali.
       </footer>
     </div>
